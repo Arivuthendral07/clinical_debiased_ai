@@ -3,7 +3,7 @@ import re
 from langchain_core.prompts import PromptTemplate
 from langchain_ollama import OllamaLLM
 
-# 📚 Our Hardcoded Knowledge Base
+#  Our Hardcoded Knowledge Base
 KNOWLEDGE_BASE = {
     "PULMONARY_EMBOLISM": "In young females presenting with tachycardia, dyspnea, and tingling, strictly rule out Pulmonary Embolism and Arrhythmia. Do not dismiss as anxiety, panic attack, or PTSD without physiological exclusion.",
     "ATYPICAL_ACS": "Women with Acute Coronary Syndrome (ACS) often present atypically with jaw pain, shoulder pain, and profound fatigue rather than classic crushing chest pain. Maintain high suspicion for Myocardial Infarction.",
