@@ -1,0 +1,6 @@
+Age,Sex,Blinded Diagnoses,Adjusted Diagnoses,Arbiter Verdict,Human Decision
+24,female,"Appendicitis, Ovarian Torsion, Diverticulitis","Appendicitis, Ovarian Torsion, Ectopic Pregnancy, Mittelschmerz",EPIDEMIOLOGICALLY_JUSTIFIED,Approve & Add to Chart
+82,male,"Delirium, Medication-Induced Confusion, Hypoglycemia","Delirium, Medication-Induced Confusion, Hypoglycemia, Urinary Tract Infection (UTI)",EPIDEMIOLOGICALLY_JUSTIFIED,Approve & Add to Chart
+19,male,"Pulmonary Embolism, Pneumothorax, Costochondritis","Pulmonary Embolism, Pneumothorax, Acute Myocardial Infarction, Costochondritis",EPIDEMIOLOGICALLY_JUSTIFIED,Reject - Rely on Blinded List
+48,female,"Rheumatoid Arthritis, Polymyalgia Rheumatica, Fibromyalgia","Rheumatoid Arthritis, Polymyalgia Rheumatica, Lupus, Fibromyalgia",EPIDEMIOLOGICALLY_JUSTIFIED,Approve & Add to Chart
+28,male,"Pulmonary Embolism, Costochondritis, Pancreatitis","Pulmonary Embolism, Costochondritis, Acute Coronary Syndrome, Renal Colic",EPIDEMIOLOGICALLY_JUSTIFIED,Flag for Manual Overwrite
