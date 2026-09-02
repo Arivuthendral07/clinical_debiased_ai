@@ -36,29 +36,29 @@ def get_vector_store():
         persist_directory=DB_DIR
     )
 
-def retrieve_clinical_guidelines(vignette_text: str) -> str:
-    """
-    Uses ChromaDB similarity search to retrieve the most relevant medical guideline 
-    based on the mathematical embedding of the symptoms.
-    """
-    baseline = "BASELINE RULE: Always prioritize life-threatening physiological conditions before considering psychiatric diagnoses.\n\n"
-    
+def retrieve_clinical_guidelines(text: str) -> str:
+    print("\n[RAG] Querying ChromaDB Vector Store...")
     try:
-        vector_store = get_vector_store()
-        print("\n[RAG] Querying ChromaDB Vector Store...")
+        vectorstore = get_vector_store()
         
-        # Retrieve the single most relevant guideline mathematically (k=1)
-        results = vector_store.similarity_search_with_score(vignette_text, k=1)
+        # CHANGED: Get scores alongside the results (lower score = closer match)
+        results_with_scores = vectorstore.similarity_search_with_score(text, k=2)
         
-        if results:
-            best_doc, distance = results[0]
-            category = best_doc.metadata.get("category", "UNKNOWN")
-            
-            # We append a safety prompt to ensure the LLM only applies it if relevant
-            return baseline + f"👉 POTENTIAL RAG MATCH (ChromaDB - {category}):\n{best_doc.page_content}\n\n(AI INSTRUCTION: If this guideline does not directly apply to the patient's physical symptoms, ignore it.)"
+        valid_guidelines = []
+        for doc, score in results_with_scores:
+            # ONLY include the guideline if the distance score is strong (e.g., under 1.2)
+            # You can tweak this threshold number based on testing!
+            if score < 1.2: 
+                valid_guidelines.append(doc.page_content)
         
-        return baseline + "No specific rules retrieved. Proceed with standard medical knowledge."
-            
+        if not valid_guidelines:
+            return "No specific RAG guidelines found for these exact symptoms."
+        
+        context = "\n".join(valid_guidelines)
+        context += "\n(AI INSTRUCTION: Only apply these guidelines if they explicitly match the patient's symptoms.)"
+        
+        return context
+        
     except Exception as e:
-        print(f"[Error] ChromaDB Retrieval Failed: {e}")
-        return baseline + "No specific rules retrieved. Proceed with standard medical knowledge."
+        print(f"[Error] RAG Retrieval Failed: {e}")
+        return "RAG System offline. Rely on base training data."

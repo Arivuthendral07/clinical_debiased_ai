@@ -3,15 +3,26 @@ from typing import List
 from langchain_core.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
 from src.state import PatientState
+from typing import List, Literal
 
 # 1. Define the exact JSON schema we want the LLM to output
 class Diagnosis(BaseModel):
     condition: str = Field(description="The name of the medical condition")
-    likelihood: str = Field(description="High, Medium, or Low")
+    
+    # 2. CHANGED: Use Literal to mathematically restrict the output choices
+    likelihood: Literal["High", "Medium", "Low"] = Field(
+        description="You MUST select exactly one of these words: High, Medium, or Low."
+    )
+    
     justification: str = Field(description="Brief reasoning based ONLY on the symptoms")
 
 class DifferentialDiagnosis(BaseModel):
-    diagnoses: List[Diagnosis] = Field(description="A list of exactly 3 potential conditions")
+    # CHANGED: Added strict mathematical bounds to force exactly 3 items
+    diagnoses: List[Diagnosis] = Field(
+        min_length=3,
+        max_length=3,
+        description="A list of exactly 3 potential conditions"
+    )
 
 HYPOTHESIS_PROMPT = """You are an objective diagnostic AI. 
 Analyze the clinical note containing ONLY symptoms and findings.

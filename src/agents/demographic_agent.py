@@ -12,8 +12,15 @@ class AdjustedDiagnosis(BaseModel):
 
 # 2. Define the schema for the agent's overall JSON response
 class DemographicAdjustmentOutput(BaseModel):
-    chain_of_thought: str = Field(description="A verbose, detailed paragraph explaining step-by-step how the physical symptoms match or do not match the RAG guidelines.")
-    adjusted_differential: List[AdjustedDiagnosis] = Field(description="List of exactly 3 adjusted potential conditions")
+    chain_of_thought: str = Field(description="A verbose, detailed paragraph explaining your logic.")
+    
+    # CHANGED: Hardcode the array length boundaries into the Pydantic parser
+    adjusted_differential: List[AdjustedDiagnosis] = Field(
+        min_length=3, 
+        max_length=3, 
+        description="List of potential conditions."
+    )
+    
     adjustment_rationale: str = Field(description="Brief summary of why you finalized this list")
 
 DEMOGRAPHIC_PROMPT = """You are an expert Clinical Epidemiologist.
